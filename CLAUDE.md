@@ -23,11 +23,8 @@ scan-reports/                                    # Opportunity scan outputs
 | Skill | Purpose |
 |---|---|
 | `/new-application` | Scaffold a new application folder |
-| `/company-research` | Research a company and write structured notes |
 | `/cover-letter` | Draft or get feedback on a cover letter |
-| `/interview-prep` | Generate interview prep materials |
 | `/opportunity-scan` | Scan watchlist for new opportunities |
-| `/decision-matrix` | Compare competing opportunities |
 | `/humanizer` | Remove AI writing patterns from text |
 
 ## Conventions
