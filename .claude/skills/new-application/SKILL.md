@@ -77,21 +77,7 @@ TODO
 TODO -- run /cover-letter for a brief
 ```
 
-## Step 5: Update Tracker
-
-Append a row to `applications/STATUS.md`. Create the file with the header if it doesn't exist:
-
-```markdown
-| Company | Program | Deadline | Status | Folder |
-|---|---|---|---|---|
-```
-
-New row:
-```
-| {Company} | {Program} | {deadline or TBC} | Pending | `{company-slug}/{program-slug}/` |
-```
-
-## Step 6: Print Summary
+## Step 5: Print Summary
 
 ```
 Scaffolded: applications/{company-slug}/{program-slug}/
