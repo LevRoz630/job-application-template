@@ -1,0 +1,98 @@
+# Target Companies Watchlist
+# ========================
+# Each entry defines a company to monitor for opportunities.
+#
+# Fields:
+#   name:        Full company name
+#   slug:        kebab-case identifier (used for folder names)
+#   type:        hedge-fund | prop-trading | investment-bank | tech | consulting | asset-manager | other
+#   careers_url: URL to the company's careers/jobs page
+#   interests:   List of opportunity types to watch for
+#   priority:    high | medium | low
+#   notes:       Any additional context (optional)
+
+# --- Hedge Funds ---
+- name: Citadel
+  slug: citadel
+  type: hedge-fund
+  careers_url: https://www.citadel.com/careers/
+  interests:
+    - summer-internship
+    - quant-research
+  priority: high
+  notes: "Global multi-strategy fund. Applications typically open Sep-Nov."
+
+- name: Two Sigma
+  slug: two-sigma
+  type: hedge-fund
+  careers_url: https://www.twosigma.com/careers/
+  interests:
+    - summer-internship
+    - quant-research
+  priority: high
+  notes: "Systematic/quantitative strategies. Strong engineering culture."
+
+# --- Tech Companies ---
+- name: Google
+  slug: google
+  type: tech
+  careers_url: https://careers.google.com/
+  interests:
+    - summer-internship
+    - graduate-programme
+  priority: high
+  notes: "STEP and SWE internships. Applications open Aug-Oct."
+
+- name: Jane Street
+  slug: jane-street
+  type: prop-trading
+  careers_url: https://www.janestreet.com/join-jane-street/
+  interests:
+    - summer-internship
+    - spring-week
+  priority: high
+  notes: "Quantitative trading firm. Puzzle-based interviews."
+
+# --- Investment Banks ---
+- name: Goldman Sachs
+  slug: goldman-sachs
+  type: investment-bank
+  careers_url: https://www.goldmansachs.com/careers/
+  interests:
+    - spring-week
+    - summer-internship
+    - insight-day
+  priority: medium
+  notes: "Multiple divisions. Spring weeks typically open Oct-Dec."
+
+- name: Morgan Stanley
+  slug: morgan-stanley
+  type: investment-bank
+  careers_url: https://www.morganstanley.com/careers
+  interests:
+    - spring-week
+    - summer-internship
+  priority: medium
+  notes: "Technology and finance roles available."
+
+# --- Consulting ---
+- name: McKinsey & Company
+  slug: mckinsey
+  type: consulting
+  careers_url: https://www.mckinsey.com/careers
+  interests:
+    - summer-internship
+    - insight-programme
+  priority: medium
+  notes: "Case-based interviews. Look for Freshman/Sophomore programs."
+
+# --- Prop Trading ---
+- name: Optiver
+  slug: optiver
+  type: prop-trading
+  careers_url: https://optiver.com/working-at-optiver/career-opportunities/
+  interests:
+    - summer-internship
+    - spring-week
+  priority: high
+  notes: "Market making. Quantitative and trading roles."

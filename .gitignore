@@ -1,0 +1,28 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+
+# Compiled PDFs (GitHub Actions builds these from .tex)
+applications/**/*.pdf
+
+# Build output
+build/
+
+
+# Python virtual environment
+.venv/
+
+# Temporary files
+*.zip
+docx_extracted/
+tmpclaude-*
+# Claude Code local config (not skills)
+.claude/*
+!.claude/skills/
