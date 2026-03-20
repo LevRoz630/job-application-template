@@ -1,20 +1,6 @@
-[Your Name]
-[Your Address]
-[Your Email] | [Your Phone]
+TODO: Write cover letter for Example Corp Summer Internship.
 
-[Date]
+Run /cover-letter for a brief with angles and ideas, then write it yourself.
+If you need a draft, ask explicitly, then run /humanizer on it.
 
-[Hiring Manager / Recruitment Team]
-Example Corp
-[Company Address]
-
-Dear [Hiring Manager / Recruitment Team],
-
-[Opening paragraph -- why this specific role and company]
-
-[Middle paragraph(s) -- your relevant experience with specific examples]
-
-[Closing paragraph -- enthusiasm, next steps]
-
-Yours sincerely,
-[Your Name]
+Keep it to 250-400 words, 3-5 paragraphs. No headers, no sign-off.

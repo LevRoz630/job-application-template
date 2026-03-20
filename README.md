@@ -1,139 +1,48 @@
 # Job Application Template
 
-A structured system for managing job applications using [Claude Code](https://claude.ai/claude-code) skills. Track applications, draft cover letters, scan for opportunities, and maintain multiple CV variants -- all from your terminal. Each skill automates a specific part of the application workflow while keeping you in control of the final output.
+Track job applications from your terminal with Claude Code. Scan for openings, scaffold application folders, draft cover letters, and compile LaTeX CVs in multiple variants (SWE, quant, IB/consulting).
 
-## Use This Template
-
-1. **Fork or clone** this repository
-2. Fill in your personal details in the CV templates under `curriculum_vitae/`
-3. Update `target-companies.yaml` with companies you want to track
-4. Start applying with `/new-application`
+## Setup
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/job-application-template.git
 cd job-application-template
 pip install -r requirements.txt
-bash install_deps.sh  # LaTeX dependencies for CV compilation
+bash install_deps.sh  # LaTeX deps for CV compilation
 ```
 
-## Directory Structure
+Then fill in your details in `curriculum_vitae/data/*.tex` and add your target companies to `target-companies.yaml`.
 
-```
-job-application-template/
-|-- .claude/skills/              # Claude Code skills (4 total)
-|-- .github/workflows/           # CI/CD for LaTeX compilation
-|-- applications/                # One folder per application
-|   |-- example-corp/
-|   |   |-- summer-internship/
-|   |   |   |-- application-responses.md
-|   |   |   |-- notes.md
-|   |   |   |-- cover-letter.txt
-|-- curriculum_vitae/            # LaTeX CV system
-|   |-- data/                    # Shared sections (education, experience, etc.)
-|   |-- swe/                     # Software engineering variant
-|   |-- quant/                   # Quantitative finance variant
-|   |-- ib-sales-consulting/     # IB / Sales / Consulting variant
-|-- scan-reports/                # Opportunity scan outputs
-|-- target-companies.yaml        # Company watchlist
-|-- ai-writing-patterns-to-avoid.md
-|-- CLAUDE.md                    # Project instructions for Claude Code
-|-- requirements.txt
-|-- install_deps.sh
-```
+## Skills
 
-## Setup
+| Skill | What it does |
+|---|---|
+| `/new-application` | Scaffolds an application folder with `application-responses.md`, `notes.md`, and `cover-letter.txt`. |
+| `/cover-letter` | Gives you a brief with angles and ideas (default), or writes a full draft if you ask. |
+| `/opportunity-scan` | Checks your watchlist for new openings and writes a report sorted by deadline urgency. |
+| `/humanizer` | Runs your text through 24 AI-writing checks from Wikipedia's "Signs of AI writing" guide. |
 
-### Python Dependencies
+## How it works
 
-```bash
-pip install -r requirements.txt
-```
+1. Add companies to `target-companies.yaml`
+2. Run `/opportunity-scan` to find open programs
+3. Run `/new-application` to create the application folder
+4. Write your cover letter (use `/cover-letter` for ideas, then write it yourself)
+5. Run `/humanizer` before submitting anything
 
-### LaTeX Dependencies (for CV compilation)
+## CV variants
 
-```bash
-bash install_deps.sh
-```
+Three LaTeX resume variants under `curriculum_vitae/`. Each has its own `cv/` directory with tailored sections. Shared content (education, skills) lives in `data/`. Compile with `xelatex resume.tex`.
 
-This installs `texlive-xetex`, `texlive-latex-extra`, `texlive-fonts-extra`, `fonts-roboto`, and `fontconfig`.
+| Variant | For |
+|---|---|
+| `swe/` | Software engineering — projects, systems, DevOps |
+| `quant/` | Quantitative finance — stats, competitions, research |
+| `ib-sales-consulting/` | Banking, sales, consulting — client work, leadership |
 
-### Compile a CV
+## Writing quality
 
-```bash
-cd curriculum_vitae/swe
-xelatex resume.tex
-```
-
-## Skills Reference
-
-| Skill | Command | What It Does |
-|---|---|---|
-| **New Application** | `/new-application` | Creates a new application folder with `application-responses.md`, `notes.md`, and `cover-letter.txt` pre-filled from your CV data |
-| **Cover Letter** | `/cover-letter` | Generates a cover letter brief (default) or full draft. Briefs give you angles and ideas; drafts use anti-AI-detection writing patterns |
-| **Opportunity Scan** | `/opportunity-scan` | Scans your watchlist companies for new openings (spring weeks, internships, insight days) and generates a prioritized report |
-| **Humanizer** | `/humanizer` | Removes 24 documented AI writing patterns from text (see `ai-writing-patterns-to-avoid.md`). Run this on cover letters before submitting |
-
-## Getting Started
-
-### 1. Configure your watchlist
-
-Edit `target-companies.yaml` to add companies you want to track:
-
-```yaml
-- name: Example Company
-  slug: example-company
-  type: tech
-  careers_url: https://example.com/careers/
-  interests:
-    - summer-internship
-    - graduate-programme
-  priority: high
-  notes: "Applications typically open Sep-Nov."
-```
-
-### 2. Scan for opportunities
-
-```
-/opportunity-scan
-```
-
-This checks your watchlist companies for current openings and generates a report in `scan-reports/`.
-
-### 3. Scaffold a new application
-
-```
-/new-application
-```
-
-Provide the company name and program, and the skill creates a ready-to-fill application folder.
-
-### 4. Write your cover letter
-
-```
-/cover-letter
-```
-
-Generates a brief with angles and ideas. Write the letter yourself for best results (AI detectors are real). If you need a full draft, ask explicitly, then run `/humanizer` on it.
-
-## CV Variants
-
-Three CV variants are included, each emphasizing different aspects of your background:
-
-| Variant | Best For | Emphasis |
-|---|---|---|
-| `swe/` | Software engineering roles | Technical projects, systems, DevOps |
-| `quant/` | Quantitative finance / trading | Statistical methods, competitions, research |
-| `ib-sales-consulting/` | Investment banking, sales, consulting | Client impact, leadership, business acumen |
-
-Each variant has its own `cv/` subdirectory with tailored section files. Shared content lives in `data/`. Edit the variant-specific files to customize for each role type.
-
-## Writing Quality
-
-Cover letters and application responses are checked against `ai-writing-patterns-to-avoid.md`, which documents all 24 AI writing patterns from Wikipedia's "Signs of AI writing" guide with before/after examples.
-
-The `/humanizer` skill reads that reference and performs a two-pass revision to catch and fix remaining tells.
-
-Best practice: write the first draft yourself using the `/cover-letter` brief, then use `/humanizer` to clean up any AI-sounding patterns that crept in during editing.
+`ai-writing-patterns-to-avoid.md` has the full catalog of 24 AI writing patterns with before/after examples. The `/humanizer` skill reads it and does a two-pass rewrite. But honestly, writing the first draft yourself and using `/cover-letter` in brief mode gets better results than generating a draft and trying to de-AI it after.
 
 ## License
 
