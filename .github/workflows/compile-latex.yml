@@ -1,0 +1,87 @@
+name: Compile LaTeX and Deploy CVs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'curriculum_vitae/**/*.tex'
+      - 'curriculum_vitae/**/*.cls'
+      - '.github/workflows/compile-latex.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'curriculum_vitae/**/*.tex'
+      - 'curriculum_vitae/**/*.cls'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compile SWE Resume
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: resume.tex
+          working_directory: curriculum_vitae/swe
+          compiler: xelatex
+          args: -file-line-error -halt-on-error -interaction=nonstopmode
+
+      - name: Compile Quant Resume
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: resume.tex
+          working_directory: curriculum_vitae/quant
+          compiler: xelatex
+          args: -file-line-error -halt-on-error -interaction=nonstopmode
+
+      - name: Compile IB Resume
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: resume.tex
+          working_directory: curriculum_vitae/ib-sales-consulting
+          compiler: xelatex
+          args: -file-line-error -halt-on-error -interaction=nonstopmode
+
+      - name: List compiled PDFs
+        run: |
+          ls -lh curriculum_vitae/swe/*.pdf || true
+          ls -lh curriculum_vitae/quant/*.pdf || true
+          ls -lh curriculum_vitae/ib-sales-consulting/*.pdf || true
+
+      # --- Optional: Deploy to a public CV repo ---
+      # To enable, create a CV_REPO_TOKEN secret and set YOUR_USERNAME/YOUR_CV_REPO below.
+      # See .github/workflows/README.md for setup instructions.
+
+      # - name: Checkout public CV repo
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: YOUR_USERNAME/YOUR_CV_REPO
+      #     token: ${{ secrets.CV_REPO_TOKEN }}
+      #     path: cv-repo
+
+      # - name: Copy PDFs to public repo
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   run: |
+      #     mkdir -p cv-repo/docs
+      #     cp curriculum_vitae/swe/resume.pdf cv-repo/docs/swe-resume.pdf || echo "SWE PDF not found"
+      #     cp curriculum_vitae/quant/resume.pdf cv-repo/docs/quant-resume.pdf || echo "Quant PDF not found"
+      #     cp curriculum_vitae/ib-sales-consulting/resume.pdf cv-repo/docs/ib-resume.pdf || echo "IB PDF not found"
+
+      # - name: Commit and push to public repo
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   run: |
+      #     cd cv-repo
+      #     git config --local user.email "github-actions[bot]@users.noreply.github.com"
+      #     git config --local user.name "github-actions[bot]"
+      #     git add docs/*.pdf
+      #     git diff --staged --quiet || git commit -m "Auto-compile LaTeX CVs"
+      #     git push

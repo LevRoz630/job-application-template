@@ -107,6 +107,7 @@ Create the `scan-reports/` directory if it doesn't exist.
 - Many firms post programs on LinkedIn, Bright Network, or TargetJobs as well as their own sites
 - Some programs fill up before the deadline ("rolling basis") -- flag these as higher urgency
 - Trading firms often have a single "apply" page with multiple tracks -- check if there are new tracks
+- Filter results based on the user's profile from their CV data -- year of study, degree subject, location, and target industries
 
 ## Managing the Watchlist
 

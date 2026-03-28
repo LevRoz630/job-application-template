@@ -2,7 +2,7 @@
 
 ## Overview
 
-This workflow automatically compiles LaTeX CVs and optionally deploys them to a separate public repository.
+A ready-to-use workflow is included in `compile-latex.yml`. It compiles all three CV variants on push to main. The deploy-to-public-repo steps are commented out by default — see setup instructions below to enable them.
 
 ## Architecture
 

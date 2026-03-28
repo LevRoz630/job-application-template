@@ -1,46 +1,30 @@
-# Job Application Tracker
+# Applications Repo
 
-Structured job application workflow powered by Claude Code skills.
+Personal repo for career applications. Claude is used for research and opportunity scanning; cover letters are written by hand.
 
-## Project Layout
+## Structure
+
+- `applications/{company-slug}/{program-slug}/` — one folder per application
+  - `application-responses.md` — form questions and answers
+  - `cover-letter.txt` — cover letter (written by hand, not AI-generated)
+  - `notes.md` — research and prep notes
+- `applications/tracker.csv` — application status tracking (company, program, status, dates)
+- `curriculum_vitae/` — LaTeX CVs using awesome-cv
+  - Variants: `swe/`, `quant/`, `ib-sales-consulting/`
+- `target-companies.yaml` — watchlist for `/opportunity-scan`
+- `scan-reports/` — output from opportunity scans
+
+## CV Compilation
 
 ```
-applications/{company-slug}/{programme-slug}/   # One folder per application
-    application-responses.md                     # Questionnaire answers
-    notes.md                                     # Company research
-    cover-letter.txt                             # Cover letter draft
-curriculum_vitae/                                # LaTeX CV templates
-    data/                                        # Shared CV sections
-    swe/                                         # Software engineering variant
-    quant/                                       # Quantitative finance variant
-    ib-sales-consulting/                         # IB/Sales/Consulting variant
-target-companies.yaml                            # Company watchlist
-scan-reports/                                    # Opportunity scan outputs
+cd curriculum_vitae/<variant>/ && xelatex -file-line-error -halt-on-error -interaction=nonstopmode resume.tex
 ```
+
+Requires: texlive-xetex, texlive-latex-extra, texlive-fonts-extra, fonts-roboto, fontconfig. Run `bash install_deps.sh` to install.
 
 ## Skills
 
-| Skill | Purpose |
-|---|---|
-| `/new-application` | Scaffold a new application folder |
-| `/cover-letter` | Draft or get feedback on a cover letter |
-| `/opportunity-scan` | Scan watchlist for new opportunities |
-| `/humanizer` | Remove AI writing patterns from text |
-
-## Conventions
-
-- Company folders use kebab-case slugs (e.g., `goldman-sachs`, `jane-street`)
-- Each application contains 3 core files: `application-responses.md`, `notes.md`, `cover-letter.txt`
-- CV variants are compiled with XeLaTeX: `cd curriculum_vitae/swe && xelatex resume.tex`
-- Cover letters should pass the `/humanizer` skill before submission
-- Always check `ai-writing-patterns-to-avoid.md` for writing guidance
-
-## Setup
-
-```bash
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Install LaTeX dependencies (for CV compilation)
-bash install_deps.sh
-```
+- `/opportunity-scan` — check target companies for new openings
+- `/new-application` — scaffold a new application folder
+- `/cover-letter` — research brief for writing cover letters
+- `/compile-cv <variant>` — compile a CV variant to PDF

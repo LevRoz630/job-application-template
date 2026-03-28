@@ -1,6 +1,6 @@
 TODO: Write cover letter for Example Corp Summer Internship.
 
 Run /cover-letter for a brief with angles and ideas, then write it yourself.
-If you need a draft, ask explicitly, then run /humanizer on it.
+If you need a draft, ask explicitly, then review it for AI writing patterns.
 
 Keep it to 250-400 words, 3-5 paragraphs. No headers, no sign-off.

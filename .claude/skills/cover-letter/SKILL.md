@@ -101,7 +101,7 @@ If the user says "just write it" or "give me a draft", generate a full letter bu
 - Don't balance the letter -- it's okay if 60% is about one thing and 10% about another
 
 After writing a draft:
-1. Run the `/humanizer` skill on the draft to catch remaining AI patterns (the 24 Wikipedia-documented signs)
+1. Review the draft for AI writing patterns before submitting.
 2. After saving the file, tell the user in chat (do NOT write this into the cover letter file): "This is AI-generated. Read it through and rewrite any sentences that don't sound like you. At minimum, change the opening and closing."
 
 ## Save Location
