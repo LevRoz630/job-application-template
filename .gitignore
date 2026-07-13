@@ -23,6 +23,3 @@ build/
 *.zip
 docx_extracted/
 tmpclaude-*
-# Claude Code local config (not skills)
-.claude/*
-!.claude/skills/

@@ -1,0 +1,5 @@
+#!/bin/sh
+if git diff --cached | grep -qE 'ghp_|github_pat_|-----BEGIN [A-Z ]*PRIVATE KEY-----'; then
+  echo "refusing to commit: looks like a secret"
+  exit 1
+fi

@@ -21,16 +21,15 @@ The user provides a path to a `.tex` file or a directory containing `resume.tex`
 ## Steps
 
 1. Determine the target `.tex` file from the user's message. Accept:
-   - A direct file path (e.g., `curriculum_vitae/swe/resume.tex`)
+   - A direct file path (e.g., `curriculum_vitae/resume.tex`)
    - A directory path (look for `resume.tex` inside it)
-   - A variant name like "swe" or "quant" (resolve to `curriculum_vitae/<name>/resume.tex`)
-   - An application folder (e.g., `applications/bofa/swe-insight-dublin/resume.tex`)
+   - An application folder (e.g., `applications/internships/example-corp/summer-internship/cv/resume.tex`)
 
 2. Check xelatex is installed:
    ```bash
    which xelatex
    ```
-   If missing, tell the user to run `bash install_deps.sh` from the repo root and stop.
+   If missing, tell the user to (re)open the repo in the dev container (`.devcontainer/`), where the LaTeX toolchain is pre-installed, or to install it manually with `sudo apt-get install -y texlive-xetex texlive-latex-extra texlive-fonts-extra fonts-roboto fontconfig`. Then stop.
 
 3. Compile from the directory containing the .tex file:
    ```bash
@@ -43,5 +42,5 @@ The user provides a path to a `.tex` file or a directory containing `resume.tex`
 ## Notes
 
 - xelatex is required (not pdflatex) because awesome-cv uses custom fonts.
-- The main CV variants are in `curriculum_vitae/` (swe, quant, ib-sales-consulting, data).
-- Some application folders also contain their own `resume.tex` files.
+- The master CV is `curriculum_vitae/resume.tex`, which `\input`s the section files in `curriculum_vitae/cv/`.
+- Per-application CVs live in their application folder's `cv/` subfolder (a pruned copy of the master), each with their own `resume.tex`.

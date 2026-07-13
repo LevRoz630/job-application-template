@@ -1,0 +1,99 @@
+// Dev Container for the Applications Repo (LaTeX CV compilation + Claude Code).
+//
+// What this gives you, ready to use:
+//   - Full LaTeX/xelatex toolchain (awesome-cv), Python + PyMuPDF==1.27.1, Node 20, git, gh, Claude Code CLI
+//   - The 4 official plugins (claude-code-setup, playwright, superpowers, claude-md-management) installed + enabled
+//   - Claude runs with NO prompts: folder trust auto-accepted (CLAUDE_CODE_SANDBOXED) + bypassPermissions
+//   - ~/.claude persisted in a named volume so your login/auth and plugins survive container rebuilds
+//
+// Heavy, deterministic deps are baked into the image (Dockerfile). One-time, network-dependent steps that
+// can fail externally (plugin clone, Playwright browser download) run in post-create.sh and are NON-FATAL.
+{
+  "name": "Applications Repo (LaTeX + Claude Code)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+
+  // gh is NOT in Debian's apt repos, so it comes from the official feature (a bare `apt install gh`
+  // in the Dockerfile would abort the whole build on the bookworm base).
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  // Non-root user is REQUIRED for bypassPermissions (the CLI refuses to run as root). This base image
+  // ships a non-root "node" user, which is also the repo's user.
+  "remoteUser": "node",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "james-yu.latex-workshop",
+        "ms-python.python",
+        "redhat.vscode-yaml",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.formatOnSave": false,
+
+        // Python: use the system interpreter where PyMuPDF is installed.
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+
+        // LaTeX Workshop: drive awesome-cv with the exact xelatex flags from CLAUDE.md.
+        "latex-workshop.latex.outDir": "%DIR%",
+        "latex-workshop.latex.recipe.default": "xelatex",
+        "latex-workshop.latex.recipes": [
+          { "name": "xelatex", "tools": ["xelatex"] }
+        ],
+        "latex-workshop.latex.tools": [
+          {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+              "-file-line-error",
+              "-halt-on-error",
+              "-interaction=nonstopmode",
+              "%DOC%"
+            ]
+          }
+        ],
+        "latex-workshop.latex.autoClean.run": "onBuilt",
+        "latex-workshop.latex.clean.fileTypes": [
+          "*.aux",
+          "*.log",
+          "*.out",
+          "*.fls",
+          "*.fdb_latexmk",
+          "*.synctex.gz"
+        ]
+      }
+    }
+  },
+
+  // Persist auth + settings + installed plugins + marketplace clones across rebuilds.
+  //   - ~/.claude       : OAuth/API credentials, settings.json, plugins, marketplace clones
+  //   - /commandhistory : bash history (wired via HISTFILE in the Dockerfile)
+  // Keyed on ${devcontainerId} so the volume is per-project. To share ONE login across all your repos,
+  // drop "-${devcontainerId}" from both source names.
+  "mounts": [
+    "source=applications-claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
+    "source=applications-bashhistory-${devcontainerId},target=/commandhistory,type=volume"
+  ],
+
+  "containerEnv": {
+    // Point the CLI at the mounted dir so credentials/settings/plugins persist.
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude",
+    // Auto-accept folder trust (this is a sandboxed dev container) so interactive `claude` never prompts.
+    "CLAUDE_CODE_SANDBOXED": "1",
+    "TZ": "${localEnv:TZ:Europe/London}"
+  },
+
+  // One-time setup on container CREATE. Idempotent + tolerant of network failures (see post-create.sh).
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "waitFor": "postCreateCommand"
+
+  // NOTE: deliberately NO runArgs / NET_ADMIN / firewall. The skills do live web research and the build
+  // pulls apt/texlive/pip/playwright assets, all of which an egress allowlist would break.
+}

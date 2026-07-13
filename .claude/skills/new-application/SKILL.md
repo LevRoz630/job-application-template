@@ -1,86 +1,91 @@
 ---
 name: new-application
 description: |
-  Scaffold a new job/program application folder with pre-filled templates. Use this skill whenever the user mentions starting a new application, applying to a company/program, setting up application materials, or wants to track a new opportunity. Trigger for phrases like "new application", "apply to [company]", "set up [program] application", "scaffold application", "start application for", "add [company] to applications", or /new-application.
+  Scaffold a new application folder (research, metadata, copy master CV, tracker row). Triggers: "new application", "apply to [company]", "start application for", /new-application.
 ---
 
-# New Application Scaffolder
+# Scaffolding a New Application
 
-Scaffold a new application folder following repo conventions.
-
-## Step 1: Gather Information
-
-Extract from the user's message or ask:
-- **Company name** and **program name** (required)
-- Deadline, URL, location (if provided)
-
-## Step 2: Create Folder
-
-Convert names to kebab-case slugs (e.g., "Morgan Stanley" -> `morgan-stanley`, "Tech Spring Insight" -> `tech-spring-insight`). Use common abbreviations where natural (BofA -> `bofa`, HRT -> `hrt`).
+Stand up an application folder grounded in researched company facts so the CV can be tailored from the start. House style: `--` not em dashes, real data only, `TBC` for unknown facts, `TODO` for sections still to research.
 
 ```
-applications/{company-slug}/{program-slug}/
+- [ ] 1. Gather company, program, category (+ deadline / URL / JD if given)
+- [ ] 2. Create the folder from kebab-case slugs
+- [ ] 3. Research the company, dispatch sub-agents to double-check
+- [ ] 4. Write notes.md
+- [ ] 5. Copy the master CV into the application's cv/ subfolder
+- [ ] 6. Append the tracker row
+- [ ] 7. Print the summary
 ```
 
-## Step 3: Read CV Data
+## 1. Gather
 
-Read from the most relevant CV variant (`curriculum_vitae/swe/`, `quant/`, or `ib-sales-consulting/`) to understand the user's background for pre-filling.
+Required: **company** and **program**. Take deadline, URL, location, and JD if offered. Don't block on missing fields.
 
-## Step 4: Create Files
+Category (top folder):
+- `internships` — jobs, internships, spring weeks, insight days
+- `competitions` — competitions, hackathons, trading challenges
+- `miscellaneous` — study abroad, residencies, fellowships, anything else
 
-### `application-responses.md`
+## 2. Folder
+
+kebab-case both names; use common abbreviations (BofA → `bofa`, HRT → `hrt`). Create `applications/{category}/{company-slug}/{program-slug}/`.
+
+## 3. Research
+
+Search open sources (careers site, JD, recent press, Glassdoor) for **values / principles**, **what they look for**, and a **role-in-brief**. Extract a **keyword list** — the company's and JD's own words for skills, tools, traits ("ownership", "stakeholder management", "low-latency") — that the CV and cover letter will mirror.
+
+Dispatch independent sub-agents to double-check findings; different agents searching independently catch contradictions and stale facts.
+
+## 4. Write `notes.md`
 
 ```markdown
 # {Company} -- {Program}
 
-| | |
-|---|---|
-| Deadline | {deadline or TBC} |
-| Location | {location or TBC} |
-| URL | {url or TBC} |
-| CV variant | `{swe or quant or ib-sales-consulting}` |
+**Programme:** {program}
+**Location:** {location or TBC}
+**Deadline:** {deadline or TBC}
+**URL:** {url or TBC}
+
+---
 
 ## Eligibility
+- {requirement} -- whether we meet it
 
-| Requirement | Evidence |
-|---|---|
-| {e.g., "Penultimate year"} | {from CV data} |
-| {e.g., "Quantitative degree"} | {from CV data} |
+## Company Research
+**Values / principles:** {…}
+**What they look for:** {…}
+**Role in brief:** {…}
 
-## Questions
+## Keywords to mirror (CV + cover letter)
+- {keyword} -- {company's / JD's phrasing}
 
-### Q1: {title or "TBC"}
-TODO
+## CV pruning plan
+- Roles to keep: {…}
+- Roles to drop: {…}
+- Bullet emphasis: {…}
 ```
 
-Pre-fill eligibility from CV data.
+## 5. Copy the master CV into cv/
 
-### `notes.md`
-
-```markdown
-# {Company} -- Notes
-
-## Status
-- [ ] Researched
-- [ ] Applied ({deadline})
-- [ ] Response received
-- [ ] Interview
-- [ ] Outcome:
-
-## Research
-TODO
-```
-
-### `cover-letter.txt`
+**`curriculum_vitae/` is the canonical CV source.** Always copy from it; prune from there.
 
 ```
-TODO -- run /cover-letter for a brief
+DEST=applications/{category}/{company-slug}/{program-slug}/cv
+mkdir "$DEST" && cp curriculum_vitae/resume.tex curriculum_vitae/awesome-cv.cls "$DEST/" && cp -r curriculum_vitae/cv "$DEST/cv"
 ```
 
-## Step 5: Print Summary
+Result: `{program}/cv/{resume.tex, awesome-cv.cls, cv/*.tex}`. The `cv/cv/` nesting matches the master so `\input{cv/...}` paths in `resume.tex` resolve. Now prune against the keyword list from step 3 — drop irrelevant roles, reorder for emphasis, rewrite bullets where the JD calls for it. No `\input` cross-references back to `curriculum_vitae/`; the application folder stands alone.
+
+## 6. Tracker
+
+Append one row to the cycle's tracker. Spring weeks & insight days → `applications/spring-{year}-tracker.csv`; summer internships → `applications/summer-{year}-tracker.csv`. Derive `{year}` from the deadline or the program name ("…2027" → `2027`); if neither carries one, ask. Create the tracker with the header line first if it doesn't exist.
 
 ```
-Scaffolded: applications/{company-slug}/{program-slug}/
-
-Next: research the company, fill in questions, write cover letter.
+company,program,status,date_submitted,date_response,has_cover_letter,has_resume,notes
+{company-slug},{program-slug},draft,,,no,no,
 ```
+
+## 7. Summary
+
+Report the folder path, the tracker row, and what's confirmed vs still `TODO`. Cover letters are not scaffolded; point to `/cover-letter` if one is needed.

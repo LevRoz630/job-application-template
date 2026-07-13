@@ -1,28 +1,57 @@
 # Job Application Template
 
-Track job applications from your terminal with Claude Code. Scaffold application folders, draft cover letters, scan for openings, and compile LaTeX CVs.
+Track job and program applications from your terminal with Claude Code. Scaffold
+application folders, tailor a master CV per role, draft cover letters, scan for
+openings, and compile LaTeX CVs.
 
 ## Setup
 
+The repo ships with a dev container (`.devcontainer/`) that installs the Python and
+LaTeX toolchain and wires up Claude Code. Open the folder in the container ("Reopen in
+Container") and you're ready.
+
+Manual setup instead:
+
 ```bash
 pip install -r requirements.txt
-bash install_deps.sh  # LaTeX deps for CV compilation
+sudo apt-get install -y texlive-xetex texlive-latex-extra texlive-fonts-extra fonts-roboto fontconfig
 ```
 
-Fill in `curriculum_vitae/data/*.tex` with your details and add target companies to `target-companies.yaml`.
+Then make it yours:
+
+1. Fill in your details in `curriculum_vitae/resume.tex` and the section files in
+   `curriculum_vitae/cv/*.tex` (they ship with `[placeholders]`).
+2. Record your applicant profile (year, degree, target roles, location) at the top of
+   `CLAUDE.md`.
+3. Add companies to watch in `target-companies.yaml`.
+
+## How it works
+
+- **One master CV** lives in `curriculum_vitae/` and is the single source of truth.
+- Each application gets a folder under `applications/{category}/{company}/{program}/`.
+  `/new-application` copies the master CV in, then you **prune** it to the role.
+- Cover letters are drafted from `curriculum_vitae/cover-letter-template.tex` only when
+  you ask.
 
 ## Skills
 
 | Skill | What it does |
 |---|---|
-| `/new-application` | Scaffold an application folder with templates |
-| `/cover-letter` | Generate a brief with angles and ideas (or a full draft if asked) |
-| `/opportunity-scan` | Check your watchlist for new openings, sorted by deadline |
-| `/compile-cv <variant>` | Compile a LaTeX CV variant to PDF |
+| `/new-application` | Research a company, scaffold the application folder, copy in the master CV, add a tracker row |
+| `/cover-letter` | Draft a tailored, STAR-based cover letter into the application folder |
+| `/opportunity-scan` | Check your `target-companies.yaml` watchlist for new openings, grouped by deadline |
+| `/compile-cv <path>` | Compile a `resume.tex` to PDF with xelatex |
+| `/humanizer` | Scan drafted text for AI-writing tells and rewrite them out |
 
-## CV Variants
+## Compiling a CV
 
-Three resume variants under `curriculum_vitae/`: `swe/`, `quant/`, `ib-sales-consulting/`. Compile with `xelatex resume.tex` from the variant directory.
+```bash
+cd curriculum_vitae/
+xelatex -file-line-error -halt-on-error -interaction=nonstopmode resume.tex
+```
+
+Or use `/compile-cv curriculum_vitae/resume.tex`. Per-application CVs compile the same
+way from their own `cv/` folder.
 
 ## License
 

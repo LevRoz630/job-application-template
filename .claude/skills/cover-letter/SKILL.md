@@ -1,109 +1,94 @@
 ---
 name: cover-letter
 description: |
-  Help write cover letters that won't get flagged as AI. Use this skill when the user wants to write, draft, or improve a cover letter for any company or program. Trigger for phrases like "write cover letter", "draft cover letter for [company]", "cover letter for [role]", "help with my cover letter", "motivational letter", or /cover-letter. Also trigger when the user has a cover-letter.txt with TODO content and asks to fill it in.
+  Draft a cover letter for a specific application using best practices: tight structure, STAR-based body, quantified achievements, heavy personalization. Triggers: "write cover letter", "draft cover letter for [company]", "cover letter for [role]", "motivational letter", /cover-letter.
 ---
 
-# Cover Letter Helper
+# Writing a Cover Letter
 
-You are helping the user with cover letters. Applications can get flagged by AI detectors, so the primary goal is producing letters that read as unmistakably human. This means changing HOW you help, not just how you write.
+Draft a one-page cover letter tailored to a specific application. Aim for **250-400 words across 3-4 paragraphs** — recruiters skim, and concise letters convert better than long ones.
 
-## The Core Problem
+## 1. Read context
 
-AI-generated text has statistical fingerprints that detectors pick up: consistent sentence length, balanced paragraph structure, smooth transitions, hedging language, predictable word choices. No amount of "write naturally" prompting fully eliminates these patterns. The solution is to **keep the user as the writer** and use Claude as a thinking partner.
+Before writing, load:
 
-## Default Mode: Generate a Brief (not a draft)
+1. **`notes.md`** in the application folder — metadata, eligibility, company research (values, what they look for, role-in-brief), and the **Keywords to mirror** list.
+2. **The CV** at `applications/{cat}/{company}/{program}/cv/resume.tex` (or `curriculum_vitae/resume.tex` if the per-app CV doesn't exist yet) — for real projects, dates, and numbers.
+3. **The JD** if it's available in the folder or was captured in `notes.md`.
 
-Unless the user explicitly asks for a full draft, produce a **cover letter brief** -- a structured set of ideas, angles, and specific details that the user uses to write the letter themselves.
+If `notes.md` is missing or thin, stop and ask the user to run `/new-application` first (or fill in research manually). Cover letter quality depends on the keyword list and role-in-brief.
 
-### Step 1: Read Background
+## 2. Structure (3-4 paragraphs)
 
-1. Check for existing application folder at `applications/{company-slug}/` -- read `notes.md` and `application-responses.md` if they exist
-2. Read CV data from the most relevant variant in `curriculum_vitae/`
-3. Read 2-3 existing cover letters for voice reference (if any exist in `applications/`)
+| Paragraph | Job | Length |
+|---|---|---|
+| Opening | Hook + named role + one-sentence positioning | 2-3 sentences |
+| Body 1 | Strongest STAR example tied to a JD requirement | 4-6 sentences |
+| Body 2 *(optional)* | Second example or a values/culture fit angle | 3-5 sentences |
+| Closing | What the applicant wants from the programme + practical close | 2-3 sentences |
 
-### Step 2: Produce the Brief
+### Opening
+- Name the **specific programme** and **company** in the first or second sentence.
+- Lead with a concrete hook: a project, result, or motivation directly relevant to the role — not "I am writing to apply…".
+- One sentence positioning (degree, year, specialism) is enough.
 
-Output a brief like this:
+### Body — STAR
+Each body paragraph centres on one concrete experience using STAR proportions: ~10% Situation, ~10% Task, ~60% Action, ~20% Result. The Result must be **quantified** (percentage, dollar amount, headcount, time saved, ranking, scale).
 
-```
-## Cover Letter Brief: {Company} -- {Program}
+Pick the experience that maps most directly onto a JD requirement or a `Keywords to mirror` term. If the JD asks for "stakeholder management", surface the role where the applicant coordinated people. If it asks for "low-latency systems", surface the relevant technical project. Match the experience to the requirement — don't lead with the applicant's favourite story if it doesn't fit.
 
-### The angle
-{One sentence: what's the core narrative thread? e.g., "You've built small-scale trading systems and want to see what happens at institutional scale."}
+Mirror the company's own phrasing for skills and traits where it's natural — recruiters notice when their words appear back.
 
-### Opening hook
-{2-3 options for how to start. These should be specific claims or observations, not throat-clearing.}
-- Option A: Start with what you're currently working on and why it's hitting limits
-- Option B: Start with a specific thing the company does that you find genuinely interesting
-- Option C: Start with the gap in your experience that this program fills
+### Closing
+- One sentence on what the applicant wants to get out of the programme (specific: "see how X works at production scale", not "passionate about finance").
+- One practical sign-off line. No "I look forward to hearing from you" boilerplate.
 
-### Experiences to weave in (pick 2-3, not all)
-- **[Experience 1]** -- angle: {specific angle for this application}
-- **[Experience 2]** -- angle: {specific angle for this application}
-- **[Experience 3]** -- angle: {specific angle for this application}
+## 3. Personalize hard
 
-### What to be honest about
-{What don't you know? What gap does this program fill? Letters work best when you admit what you don't understand yet. Suggest 1-2 honest admissions.}
+Generic letters get flagged immediately. Every letter must include at least two of:
 
-### How to close
-{Suggest an ending -- not a wrap-up, just the last thought. End with a forward-looking statement or a practical observation.}
+- A **named company-specific thing** — desk, product, recent launch, team, paper, public principle.
+- A **JD requirement** quoted or paraphrased close to verbatim.
+- A **mirrored keyword** from `notes.md`.
+- A reason this **specific programme** (not the company in general) fits the applicant.
 
-### Things to avoid for this specific letter
-- {e.g., "Don't mention payments -- you don't know enough about their payments business"}
-- {e.g., "Don't compare to [other company] -- different company, different appeal"}
-```
+If none of these can be produced without invention, the research isn't deep enough — push back to research, don't fabricate.
 
-Save the brief to `cover-letter-brief.md` in the application folder.
+## 4. Quantify everything you can
 
-### Step 3: After the user writes it
+Replace vague claims with numbers from the CV, e.g. "cut runtime by 40%", "managed a £X portfolio", "top 5% of 10,000+ participants", "led a team of 8", "served 500+ users". If a claim has no number, ask whether it earns its place vs a quantified alternative.
 
-When the user comes back with a draft they've written themselves, help by:
-- Pointing out anything that sounds generic or could apply to any company
-- Suggesting where to add a specific detail or number
-- Flagging if it's too long (aim for 250-400 words, 3-5 paragraphs)
-- Checking it matches their existing voice
+## 5. Compose the .tex file
 
-## Draft Mode (only when explicitly asked)
+Cover letter lives at `applications/{cat}/{company}/{program}/cover-letter.tex` — sister of the `cv/` folder.
 
-If the user says "just write it" or "give me a draft", generate a full letter but apply these rules aggressively:
+1. Copy the master template:
+   ```
+   cp curriculum_vitae/cover-letter-template.tex applications/{cat}/{company}/{program}/cover-letter.tex
+   cp curriculum_vitae/awesome-cv.cls applications/{cat}/{company}/{program}/awesome-cv.cls
+   ```
+2. Fill the placeholder slots in the copied file:
+   - `{{POSITION_TAGLINE}}` — tagline below the name (e.g. "[Your Degree] · [Your University]"). Tune to the role (consulting vs quant vs banking).
+   - `{{RECIPIENT_NAME}}` — recruiting team name (e.g. "[Company] Recruitment").
+   - `{{RECIPIENT_ORG_ADDRESS}}` — org + city, separated by `\\` (e.g. `[Company Name]\\[City, Country]`).
+   - `{{LETTER_TITLE}}` — e.g. "Application: [Programme Name]".
+   - `{{LETTER_OPENING}}` — e.g. "Dear [Company] Recruitment Team," (use a real name if `notes.md` has one).
+   - `{{PARAGRAPH_1}}`, `{{PARAGRAPH_2}}`, `{{PARAGRAPH_3}}` — the drafted paragraphs.
+3. If the letter is 3 paragraphs (most cases), delete the unused `{{PARAGRAPH_N}}` line entirely so a blank paragraph doesn't render.
 
-### Voice patterns to aim for
+## 6. Self-check before saving
 
-**Sentence structure:**
-- Mix short and long. A short statement followed by a complex sentence.
-- Sentence fragments are fine. "Personal projects, competitions, a few side gigs."
-- Start sentences with "But", "And", "Same thing at". Not "Moreover", "Furthermore", "Additionally".
+Run through this before declaring the letter done:
 
-**Word choice:**
-- Use the same word twice rather than finding a synonym. If you said "data" in the last sentence, say "data" again.
-- Contractions always: "I'm", "I've", "don't", "that's", "it's", "can't"
-- No hedging: not "I believe I could contribute" but "I want to understand how that works"
-- No qualifiers: not "quite interesting" or "rather impressive" -- just state it
+- [ ] 250-400 words total
+- [ ] 3 or 4 paragraphs, not more
+- [ ] Company **and** programme named in paragraph 1
+- [ ] At least one quantified result in the body
+- [ ] At least two personalization hits (named thing / JD requirement / mirrored keyword / programme fit)
+- [ ] No "I am writing to…", "I look forward to hearing…", "valuable addition to your team"
+- [ ] All placeholder slots in the .tex filled or removed (no stray `{{...}}` left)
+- [ ] Run the draft through `/humanizer` before shipping
 
-**Paragraph structure:**
-- Uneven lengths. One paragraph can be 2 sentences, the next can be 5.
-- No topic sentences. Don't start paragraphs with a thesis.
-- Paragraphs don't need tidy conclusions. Just stop when the point is made.
+## 7. Tracker update
 
-**Overall:**
-- No salutation, no closing, no sign-off
-- End abruptly. The last sentence is often just a practical statement, not a crescendo.
-- Never use: passionate, driven, eager, thrive, leverage, synergy, dynamic, fast-paced, cutting-edge, industry-leading, prestigious
-- Never use: "I am writing to...", "I would like to express...", "I am confident that..."
-
-**Anti-AI-detection specifics:**
-- Vary sentence length dramatically (5 words then 25 words)
-- Include at least one grammatically informal construction per paragraph
-- Use concrete numbers from CV but state them casually
-- Reference real places casually
-- One paragraph should be noticeably shorter than the others
-- Don't balance the letter -- it's okay if 60% is about one thing and 10% about another
-
-After writing a draft:
-1. Review the draft for AI writing patterns before submitting.
-2. After saving the file, tell the user in chat (do NOT write this into the cover letter file): "This is AI-generated. Read it through and rewrite any sentences that don't sound like you. At minimum, change the opening and closing."
-
-## Save Location
-
-Save to `applications/{company-slug}/{program-slug}/cover-letter.txt` (for drafts) or `cover-letter-brief.md` (for briefs).
+After saving, set `has_cover_letter` to `yes` in the relevant `applications/spring-{year}-tracker.csv` or `applications/summer-{year}-tracker.csv` row.

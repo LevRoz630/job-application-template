@@ -1,0 +1,78 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+% Awesome CV LaTeX Template for Cover Letter
+%
+% Canonical cover letter template for this repo. /cover-letter copies this
+% into the application folder as a sister of the cv/ folder, then fills the
+% placeholder slots marked {{...}}. The body paragraphs in cvletter must be
+% drafted by /cover-letter using the role's notes.md and JD keywords.
+
+%-------------------------------------------------------------------------------
+% CONFIGURATIONS
+%-------------------------------------------------------------------------------
+\documentclass[11pt, a4paper]{awesome-cv}
+
+\geometry{left=1.4cm, top=1.2cm, right=1.4cm, bottom=1.2cm, footskip=.4cm}
+
+\definecolor{awesome}{HTML}{000000}
+\definecolor{darktext}{HTML}{000000}
+\definecolor{text}{HTML}{333333}
+\definecolor{graytext}{HTML}{444444}
+\definecolor{lighttext}{HTML}{666666}
+\definecolor{sectiondivider}{HTML}{000000}
+
+\setbool{acvSectionColorHighlight}{false}
+\renewcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
+
+
+%-------------------------------------------------------------------------------
+%	PERSONAL INFORMATION
+%-------------------------------------------------------------------------------
+\name{[First]}{[Last]}
+\position{{{POSITION_TAGLINE}}} % e.g. "[Your Degree] · [Your University]"
+\address{[Your City, Country]}
+
+\mobile{[Your Phone Number]}
+\email{[your.email@example.com]}
+\github{[your-github]}
+\linkedin{[your-linkedin]}
+
+
+%-------------------------------------------------------------------------------
+%	LETTER INFORMATION
+%-------------------------------------------------------------------------------
+\recipient
+  {{{RECIPIENT_NAME}}}            % e.g. "[Company] Recruitment"
+  {{{RECIPIENT_ORG_ADDRESS}}}     % e.g. "[Company Name]\\[City, Country]"
+\letterdate{\today}
+\lettertitle{{{LETTER_TITLE}}}    % e.g. "Application: [Programme Name]"
+\letteropening{{{LETTER_OPENING}}} % e.g. "Dear [Company] Recruitment Team,"
+\letterclosing{Regards,}
+\letterenclosure[Attached]{Curriculum Vitae}
+
+
+%-------------------------------------------------------------------------------
+\begin{document}
+
+\makecvheader[C]
+
+\makecvfooter
+  {}
+  {[Your Name]~~~·~~~Cover Letter}
+  {}
+
+\makelettertitle
+
+\begin{cvletter}
+
+{{PARAGRAPH_1}}
+
+{{PARAGRAPH_2}}
+
+{{PARAGRAPH_3}}
+
+\end{cvletter}
+
+\makeletterclosing
+
+\end{document}

@@ -1,40 +1,35 @@
 # Compiled CVs
 
-This directory placeholder exists for local development.
+Local build output directory for compiled PDFs. CVs are compiled on demand with
+xelatex — there is no CI build step.
 
-## Build Process
+## Build
 
-When you push changes to `main` that modify files in `curriculum_vitae/`:
+Master CV:
 
-1. GitHub Actions compiles the LaTeX files using XeLaTeX
-2. Generated PDFs can be pushed to a separate public repository (optional)
-3. PDFs are available for download from the Actions artifacts
-
-## Files Generated
-
-- `swe-resume.pdf` - Software Engineering Resume
-- `quant-resume.pdf` - Quantitative Finance Resume
-- `ib-sales-consulting-resume.pdf` - IB/Sales/Consulting Resume
-
-## Local Compilation
-
-To compile locally:
 ```bash
-cd curriculum_vitae/swe
-xelatex resume.tex
-
-cd curriculum_vitae/quant
-xelatex resume.tex
-
-cd curriculum_vitae/ib-sales-consulting
-xelatex resume.tex
+cd curriculum_vitae/
+xelatex -file-line-error -halt-on-error -interaction=nonstopmode resume.tex
 ```
 
-PDFs will be generated in each variant's directory.
+Per-application CV:
 
-## Setup
-
-If you haven't installed LaTeX dependencies yet:
 ```bash
-bash install_deps.sh
+cd applications/<category>/<company>/<program>/cv/
+xelatex -file-line-error -halt-on-error -interaction=nonstopmode resume.tex
 ```
+
+Or use the `/compile-cv <path>` skill, which resolves the target and reports the
+output PDF size.
+
+## Dependencies
+
+The dev container (`.devcontainer/`) installs the LaTeX toolchain automatically.
+Manual install:
+
+```bash
+sudo apt-get install -y texlive-xetex texlive-latex-extra texlive-fonts-extra fonts-roboto fontconfig
+```
+
+xelatex (not pdflatex) is required because awesome-cv uses custom fonts. Build
+artifacts (`*.aux`, `*.log`, generated `*.pdf`, …) are gitignored.
